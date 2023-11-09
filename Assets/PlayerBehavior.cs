@@ -17,10 +17,15 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField]
     Transform _groundPoint;
 
+    Joystick _leftJoystick;
+
     // Start is called before the first frame update
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+
+        _leftJoystick = GameObject.Find("LeftJoystick").GetComponent<Joystick>();
+
     }
 
     // Update is called once per frame
@@ -34,7 +39,12 @@ public class PlayerBehavior : MonoBehaviour
 
     void Move()
     {
-        float xDirection = Input.GetAxisRaw("Horizontal"); // if it moves to right it is +1 else if it moves to left it is -1
+        float leftJoystickInput = 0;
+        if(_leftJoystick)
+        {
+            leftJoystickInput = _leftJoystick.Horizontal;
+        }
+        float xDirection = Input.GetAxisRaw("Horizontal") + leftJoystickInput; // if it moves to right it is +1 else if it moves to left it is -1
 
         Debug.Log(xDirection);
 
@@ -69,8 +79,9 @@ public class PlayerBehavior : MonoBehaviour
 
     void Flip(float direction)
     {
-        if (direction == 0)
-            return;
-        transform.localScale = new Vector3(direction, 1, 1);
+        if (direction < 0)
+            transform.localScale = new Vector3(-1, 1, 1);
+        else if (direction > 0)
+            transform.localScale = Vector3.one;
     }
 }
