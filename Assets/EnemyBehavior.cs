@@ -11,10 +11,18 @@ public class EnemyBehavior : MonoBehaviour
 
     [SerializeField]
     Transform _groundPoint;
+    bool _isGrounded;
+
+    [SerializeField]
+    float _groundRadius = .3f;
 
     [SerializeField]
     Transform _headPoint;
     bool _isThereObstacleFrontOfMe = false;
+
+    [SerializeField]
+    Transform _frontStepPoint;
+    bool _isThereStepFrontOfMe = true;
 
     [SerializeField]
     LayerMask _collidingLayers;
@@ -36,17 +44,20 @@ public class EnemyBehavior : MonoBehaviour
     private void FixedUpdate()
     {
         _isThereObstacleFrontOfMe = Physics2D.Linecast(_groundPoint.position, _headPoint.position, _collidingLayers);
-
-        if( _isThereObstacleFrontOfMe )
+        _isThereStepFrontOfMe = Physics2D.Linecast(_groundPoint.position, _frontStepPoint.position, _collidingLayers);
+        _isGrounded = Physics2D.OverlapCircle(_groundPoint.position, _groundRadius, _collidingLayers);
+        if( _isGrounded && (_isThereObstacleFrontOfMe || !_isThereStepFrontOfMe) )
         {
             ChangeDirection();
         }
 
-        Move();
+        if(_isGrounded)
+            Move();
     }
     void Move()
     {
-        _rigidbody.AddForce(Vector3.right * transform.localScale.x * _speed);
+        /* _rigidbody.AddForce(Vector3.right * transform.localScale.x * _speed);*/
+        transform.position += Vector3.right * transform.localScale.x * _speed;
     }
 
     void ChangeDirection()
