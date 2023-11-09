@@ -23,8 +23,8 @@ public class PlayerBehavior : MonoBehaviour
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-
-        _leftJoystick = GameObject.Find("LeftJoystick").GetComponent<Joystick>();
+        if(GameObject.Find("ScreenController"))
+            _leftJoystick = GameObject.Find("LeftJoystick").GetComponent<Joystick>();
 
     }
 
