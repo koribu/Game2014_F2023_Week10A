@@ -27,16 +27,18 @@ public class PlayerBehavior : MonoBehaviour
     void Update()
     {
         //Movement functionality
-        Move();
+       Move();
        //Jump fucntionality
        Jump();
     }
 
     void Move()
     {
-        float xDirection = Input.GetAxisRaw("Horizontal");
+        float xDirection = Input.GetAxisRaw("Horizontal"); // if it moves to right it is +1 else if it moves to left it is -1
 
         Debug.Log(xDirection);
+
+        Flip(xDirection);
 
         if(xDirection > 0)
         {
@@ -63,5 +65,12 @@ public class PlayerBehavior : MonoBehaviour
         {
             _rigidbody.AddForce(Vector2.up * _jumpForceAmount);
         }
+    }
+
+    void Flip(float direction)
+    {
+        if (direction == 0)
+            return;
+        transform.localScale = new Vector3(direction, 1, 1);
     }
 }
